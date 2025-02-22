@@ -36,6 +36,10 @@ public class GestorTasques {
 
         validarSiExisteixTasca(descripcio);
 
+        if (prioritat != null && (prioritat < 1 || prioritat > 5)) { ///resolt
+            throw new Exception("La prioritat ha de ser un valor entre 1 i 5");
+        }
+
         if (dataInici != null && dataFiPrevista != null && dataInici.isAfter(dataFiPrevista)) {
             throw new Exception("La data d'inici no pot ser posterior a la data fi prevista.");
         }
@@ -52,6 +56,13 @@ public class GestorTasques {
         // Enviar notificació per correu
         if(emailService != null){
             emailService.enviarCorreu(this.destinatari, "Nova Tasca Creada", "Has creat la tasca: " + descripcio);
+        }
+          if (dataInici != null && dataFiPrevista != null && dataInici.isAfter(dataFiPrevista)) {
+            throw new Exception("La data d'inici no pot ser posterior a la data fi prevista.");
+        }
+
+        if (prioritat != null && (prioritat < 1 || prioritat > 5)) {
+            throw new Exception("La prioritat ha de ser un valor entre 1 i 5");
         }
 
         return novaTasca.getId();
@@ -82,6 +93,7 @@ public class GestorTasques {
         for (Tasca tasca : llista) {
             if (tasca.getId() == id) {
                 tasca.setCompletada(true);
+             //   tasca.getDataFiReal(LocalDate.now());//--------------------------------
                 tascaModificada = tasca;
                 break;
             }
@@ -111,10 +123,13 @@ public class GestorTasques {
             if (tasca.getId() == id) {
                 if (tasca.isCompletada() && (completada == null || !completada)) {
                     tasca.setDataFiReal(null);
+
                 }
-                tasca.setCompletada(completada == null ? false : completada);
-                tasca.setDescripcio(novaDescripcio);
-                tasca.setPrioritat(prioritat);
+                tasca.setCompletada(completada == null ? false : completada); /// cambia data funciona
+                tasca.setDescripcio(novaDescripcio);///--------------------------------
+                tasca.setPrioritat(prioritat);//--------------------------------
+                tasca.setDataInici(dataInici);//--------------------------------
+                tasca.setDataFiPrevista(dataFiPrevista);//--------------------------------
                 tascaModificada = tasca;
                 break;
             }
@@ -156,7 +171,10 @@ public class GestorTasques {
         for (Tasca tasca : llistarTasques()) {
             if (tasca.isCompletada() && filtreCompletada) {
                 tasquesFiltrades.add(tasca);
+            }else if (!tasca.isCompletada() && !filtreCompletada){ //resolt
+                tasquesFiltrades.add(tasca);
             }
+            
         }
         return tasquesFiltrades;
     }
