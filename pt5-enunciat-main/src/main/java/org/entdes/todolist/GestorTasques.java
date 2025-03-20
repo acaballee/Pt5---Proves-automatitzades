@@ -57,13 +57,8 @@ public class GestorTasques {
         if(emailService != null){
             emailService.enviarCorreu(this.destinatari, "Nova Tasca Creada", "Has creat la tasca: " + descripcio);
         }
-          if (dataInici != null && dataFiPrevista != null && dataInici.isAfter(dataFiPrevista)) {
-            throw new Exception("La data d'inici no pot ser posterior a la data fi prevista.");
-        }
-
-        if (prioritat != null && (prioritat < 1 || prioritat > 5)) {
-            throw new Exception("La prioritat ha de ser un valor entre 1 i 5");
-        }
+          
+       
 
         return novaTasca.getId();
     }
@@ -93,7 +88,7 @@ public class GestorTasques {
         for (Tasca tasca : llista) {
             if (tasca.getId() == id) {
                 tasca.setCompletada(true);
-             //   tasca.getDataFiReal(LocalDate.now());//--------------------------------
+                tasca.setDataFiReal(LocalDate.now());
                 tascaModificada = tasca;
                 break;
             }
